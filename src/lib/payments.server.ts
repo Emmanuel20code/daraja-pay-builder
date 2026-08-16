@@ -32,6 +32,15 @@ export type PushInput = {
   description?: string | undefined;
 };
 
+export async function loadMasterCredentials() {
+  const { data } = await supabaseAdmin
+    .from("platform_credentials")
+    .select("*")
+    .eq("id", true)
+    .maybeSingle();
+  return data;
+}
+
 export async function runStkPush(
   userId: string,
   input: PushInput,
@@ -48,14 +57,17 @@ export async function runStkPush(
     .eq("user_id", userId)
     .maybeSingle();
 
-  const config = getDarajaConfig();
+  const master = await loadMasterCredentials();
+  const config = getDarajaConfig(master);
   const shortcode = settings?.shortcode || config.shortcode;
   const passkey = settings?.passkey || config.passkey;
   const accountReference =
     input.accountReference || settings?.account_reference || "PayWave";
   const description = input.description || "Payment";
   const callbackUrl =
-    settings?.callback_url || `${origin}/api/public/stk/callback`;
+    settings?.callback_url ||
+    master?.default_callback_url ||
+    `${origin}/api/public/stk/callback`;
 
   const { data: tx, error: txError } = await supabaseAdmin
     .from("transactions")
