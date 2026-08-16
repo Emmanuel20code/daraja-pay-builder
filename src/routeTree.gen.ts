@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedKeysRouteImport } from './routes/_authenticated/keys'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as ApiPublicStkCallbackRouteImport } from './routes/api/public/stk/callback'
 import { Route as ApiPublicStkPushRouteImport } from './routes/api/public/stk/push'
 
 const IndexRoute = IndexRouteImport.update({
@@ -46,6 +47,11 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicStkCallbackRoute = ApiPublicStkCallbackRouteImport.update({
+  id: '/api/public/stk/callback',
+  path: '/api/public/stk/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicStkPushRoute = ApiPublicStkPushRouteImport.update({
   id: '/api/public/stk/push',
   path: '/api/public/stk/push',
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/keys': typeof AuthenticatedKeysRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/api/public/stk/callback': typeof ApiPublicStkCallbackRoute
   '/api/public/stk/push': typeof ApiPublicStkPushRoute
 }
 export interface FileRoutesByTo {
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/keys': typeof AuthenticatedKeysRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/api/public/stk/callback': typeof ApiPublicStkCallbackRoute
   '/api/public/stk/push': typeof ApiPublicStkPushRoute
 }
 export interface FileRoutesById {
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/keys': typeof AuthenticatedKeysRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/api/public/stk/callback': typeof ApiPublicStkCallbackRoute
   '/api/public/stk/push': typeof ApiPublicStkPushRoute
 }
 export interface FileRouteTypes {
@@ -86,6 +95,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/keys'
     | '/settings'
+    | '/api/public/stk/callback'
     | '/api/public/stk/push'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/keys'
     | '/settings'
+    | '/api/public/stk/callback'
     | '/api/public/stk/push'
   id:
     | '__root__'
@@ -103,6 +114,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/keys'
     | '/_authenticated/settings'
+    | '/api/public/stk/callback'
     | '/api/public/stk/push'
   fileRoutesById: FileRoutesById
 }
@@ -110,6 +122,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiPublicStkCallbackRoute: typeof ApiPublicStkCallbackRoute
   ApiPublicStkPushRoute: typeof ApiPublicStkPushRoute
 }
 
@@ -157,6 +170,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/stk/callback': {
+      id: '/api/public/stk/callback'
+      path: '/api/public/stk/callback'
+      fullPath: '/api/public/stk/callback'
+      preLoaderRoute: typeof ApiPublicStkCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/stk/push': {
       id: '/api/public/stk/push'
       path: '/api/public/stk/push'
@@ -186,6 +206,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiPublicStkCallbackRoute: ApiPublicStkCallbackRoute,
   ApiPublicStkPushRoute: ApiPublicStkPushRoute,
 }
 export const routeTree = rootRouteImport
