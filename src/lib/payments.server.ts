@@ -28,8 +28,8 @@ export function generateApiKey(): { raw: string; prefix: string } {
 export type PushInput = {
   phone: string;
   amount: number;
-  accountReference?: string;
-  description?: string;
+  accountReference?: string | undefined;
+  description?: string | undefined;
 };
 
 export async function runStkPush(
