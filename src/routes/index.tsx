@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
   BarChart3,
@@ -191,11 +191,11 @@ function Index() {
             </a>
           </nav>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" className="hidden sm:inline-flex">
-              Sign in
+            <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild>
+              <Link to="/auth">Sign in</Link>
             </Button>
-            <Button variant="hero" size="sm">
-              Get API key
+            <Button variant="hero" size="sm" asChild>
+              <Link to="/auth">Get API key</Link>
             </Button>
           </div>
         </div>
@@ -405,9 +405,11 @@ function Index() {
               your own software today.
             </p>
             <div className="mt-9 flex flex-wrap justify-center gap-3">
-              <Button variant="hero" size="xl">
-                Get started free
-                <ArrowRight />
+              <Button variant="hero" size="xl" asChild>
+                <Link to="/auth">
+                  Get started free
+                  <ArrowRight />
+                </Link>
               </Button>
               <Button variant="glass" size="xl">
                 Book a walkthrough
