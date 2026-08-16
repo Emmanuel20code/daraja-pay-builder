@@ -7,9 +7,12 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Waves } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { getAdminStatus } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/_authenticated")({
   component: AuthenticatedLayout,
@@ -25,6 +28,12 @@ function AuthenticatedLayout() {
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [ready, setReady] = useState(false);
+  const fetchStatus = useServerFn(getAdminStatus);
+  const adminStatus = useQuery({
+    queryKey: ["admin-status"],
+    queryFn: () => fetchStatus(),
+    enabled: ready,
+  });
 
   useEffect(() => {
     let active = true;
@@ -59,7 +68,12 @@ function AuthenticatedLayout() {
             PayWave
           </Link>
           <nav className="flex items-center gap-1">
-            {NAV.map((item) => (
+            {[
+              ...NAV,
+              ...(adminStatus.data?.isAdmin
+                ? [{ to: "/admin", label: "Admin" } as const]
+                : []),
+            ].map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
