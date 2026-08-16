@@ -222,9 +222,11 @@ function Index() {
                 or paybill.
               </p>
               <div className="mt-9 flex flex-wrap items-center gap-3">
-                <Button variant="hero" size="xl">
-                  Generate your API key
-                  <ArrowRight />
+                <Button variant="hero" size="xl" asChild>
+                  <Link to="/auth">
+                    Generate your API key
+                    <ArrowRight />
+                  </Link>
                 </Button>
                 <Button variant="glass" size="xl">
                   <Terminal />
