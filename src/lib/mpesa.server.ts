@@ -98,7 +98,7 @@ export async function initiateStkPush(config: DarajaConfig, args: StkPushArgs) {
     PhoneNumber: args.phone,
     CallBackURL: args.callbackUrl,
     AccountReference: args.accountReference.slice(0, 12),
-    TransactionDesc: args.description.slice(0, ch(13)),
+    TransactionDesc: args.description.slice(0, 13),
   };
 
   const res = await fetch(`${config.baseUrl}/mpesa/stkpush/v1/processrequest`, {
@@ -114,6 +114,3 @@ export async function initiateStkPush(config: DarajaConfig, args: StkPushArgs) {
   return { ok: res.ok, status: res.status, body };
 }
 
-function ch(n: number) {
-  return n;
-}
