@@ -8,12 +8,20 @@ export type DarajaConfig = {
   passkey: string;
 };
 
-export function getDarajaConfig(): DarajaConfig {
-  const env = (process.env["MPESA_ENV"] ?? "sandbox").toLowerCase();
-  const consumerKey = process.env["MPESA_CONSUMER_KEY"];
-  const consumerSecret = process.env["MPESA_CONSUMER_SECRET"];
-  const shortcode = process.env["MPESA_SHORTCODE"];
-  const passkey = process.env["MPESA_PASSKEY"];
+export type MasterCredentials = {
+  environment?: string | null;
+  consumer_key?: string | null;
+  consumer_secret?: string | null;
+  default_shortcode?: string | null;
+  default_passkey?: string | null;
+};
+
+export function getDarajaConfig(master?: MasterCredentials | null): DarajaConfig {
+  const env = (master?.environment ?? process.env["MPESA_ENV"] ?? "sandbox").toLowerCase();
+  const consumerKey = master?.consumer_key || process.env["MPESA_CONSUMER_KEY"];
+  const consumerSecret = master?.consumer_secret || process.env["MPESA_CONSUMER_SECRET"];
+  const shortcode = master?.default_shortcode || process.env["MPESA_SHORTCODE"];
+  const passkey = master?.default_passkey || process.env["MPESA_PASSKEY"];
 
   const missing = Object.entries({
     MPESA_CONSUMER_KEY: consumerKey,
@@ -25,7 +33,9 @@ export function getDarajaConfig(): DarajaConfig {
     .map(([k]) => k);
 
   if (missing.length) {
-    throw new Error(`Missing Daraja credentials: ${missing.join(", ")}`);
+    throw new Error(
+      `Master Daraja credentials are not configured yet (missing: ${missing.join(", ")}). A PayWave super admin must set them in the admin console.`,
+    );
   }
 
   return {
