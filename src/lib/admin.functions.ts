@@ -82,7 +82,15 @@ export const savePlatformCredentials = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const payload: Record<string, string | null> = {
+    const payload: {
+      environment: string;
+      consumer_key: string | null;
+      default_shortcode: string | null;
+      default_callback_url: string | null;
+      updated_by: string;
+      consumer_secret?: string;
+      default_passkey?: string;
+    } = {
       environment: data.environment,
       consumer_key: data.consumer_key || null,
       default_shortcode: data.default_shortcode || null,
@@ -90,8 +98,8 @@ export const savePlatformCredentials = createServerFn({ method: "POST" })
       updated_by: context.userId,
     };
     // Secrets stay unchanged when left blank.
-    if (data.consumer_secret) payload["consumer_secret"] = data.consumer_secret;
-    if (data.default_passkey) payload["default_passkey"] = data.default_passkey;
+    if (data.consumer_secret) payload.consumer_secret = data.consumer_secret;
+    if (data.default_passkey) payload.default_passkey = data.default_passkey;
 
     const { error } = await supabaseAdmin
       .from("platform_credentials")
